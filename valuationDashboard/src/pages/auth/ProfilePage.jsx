@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
-import "./ProfilePage.css";
 
 const ProfilePage = () => {
   const { user, login } = useAuth();
@@ -44,156 +43,151 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="profile-container">
-      <div className="profile-card">
-        <div className="profile-header">
-          <h1 className="profile-title">Edit Profile</h1>
+    <div className="p-4 sm:p-6 lg:p-10 max-w-7xl mx-auto">
+      <div className="bg-white rounded-xl shadow-md p-6 sm:p-8 lg:p-10">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 md:mb-0">
+            Edit Profile
+          </h1>
           <button
             onClick={() => setShowPassword(!showPassword)}
-            className="profile-button"
+            className="self-start md:self-auto px-4 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 transition"
           >
             {showPassword ? "Cancel" : "Change Password"}
           </button>
         </div>
 
         {showPassword ? (
-          <div className="profile-section-divider">
-            <h2 className="profile-section-title">Change Password</h2>
-            <form onSubmit={handlePasswordChange}>
-              <div className="mb-4">
-                <label className="profile-form-label" htmlFor="password">
-                  New Password
-                </label>
-                <input
-                  className="profile-form-input"
-                  id="password"
-                  type="password"
-                  placeholder="******************"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-              <div className="mb-4">
-                <label className="profile-form-label" htmlFor="current-password">
-                  Current Password
-                </label>
-                <input
-                  className="profile-form-input"
-                  id="current-password"
-                  type="password"
-                  placeholder="******************"
-                  value={currentPassword}
-                  onChange={(e) => setCurrentPassword(e.target.value)}
-                />
-              </div>
-              <div className="mb-4">
-                <label className="profile-form-label" htmlFor="confirm-password">
-                  Confirm New Password
-                </label>
-                <input
-                  className="profile-form-input"
-                  id="confirm-password"
-                  type="password"
-                  placeholder="******************"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                />
-              </div>
-              <div className="flex items-center">
-                <button className="profile-update-button" type="submit">
-                  Update Password
-                </button>
-              </div>
+          <div className="space-y-4">
+            <h2 className="text-lg font-semibold text-gray-700">Change Password</h2>
+            <form onSubmit={handlePasswordChange} className="space-y-4">
+              <input
+                type="password"
+                placeholder="Current Password"
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <input
+                type="password"
+                placeholder="New Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <input
+                type="password"
+                placeholder="Confirm New Password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <button
+                type="submit"
+                className="px-4 py-2 bg-green-500 text-white rounded-lg shadow hover:bg-green-600 transition"
+              >
+                Update Password
+              </button>
             </form>
           </div>
         ) : (
-          <div>
-            <div className="flex items-center mb-6">
+          <div className="space-y-6">
+            {/* Profile Info */}
+            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
               <div className="relative">
                 <img
-                  className="w-32 h-32 rounded-full mr-6"
                   src={profileImage}
                   alt="Profile"
+                  className="w-32 h-32 rounded-full object-cover shadow-md"
                 />
-                <label
-                  htmlFor="profileImage"
-                  className="absolute bottom-0 right-0 bg-blue-500 hover:bg-blue-600 text-white rounded-full p-2 cursor-pointer"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L14.732 5.232z" />
+                <label className="absolute bottom-0 right-0 bg-blue-500 hover:bg-blue-600 text-white rounded-full p-2 cursor-pointer">
+                  <input type="file" className="hidden" onChange={handleImageChange} />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M15.232 5.232l3.536 3.536M6.5 21.036H3v-3.5L14.732 5.232a2.5 2.5 0 113.536 3.536z" />
                   </svg>
-                  <input type="file" id="profileImage" className="hidden" onChange={handleImageChange} />
                 </label>
               </div>
-              <div>
+              <div className="text-center sm:text-left">
                 <h2 className="text-2xl font-bold text-gray-800">{username}</h2>
                 <p className="text-gray-600">{email}</p>
               </div>
             </div>
 
-            <div className="profile-section-divider">
-              <h2 className="profile-section-title">Organization Details</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Organization Details */}
+            <div className="bg-gray-50 p-4 rounded-lg shadow-inner">
+              <h2 className="text-lg font-semibold text-gray-700 mb-4">Organization Details</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="profile-form-label">Organization Name</label>
-                  <p className="profile-form-text">Fintech Solutions Inc.</p>
+                  <p className="text-gray-500 font-medium">Organization Name</p>
+                  <p className="text-gray-700">Fintech Solutions Inc.</p>
                 </div>
                 <div>
-                  <label className="profile-form-label">Organization Address</label>
-                  <p className="profile-form-text">123 Finance Street, Suite 456, Money City, 78910</p>
+                  <p className="text-gray-500 font-medium">Organization Address</p>
+                  <p className="text-gray-700">
+                    123 Finance Street, Suite 456, Money City, 78910
+                  </p>
                 </div>
                 <div>
-                  <label className="profile-form-label">Contact Number</label>
-                  <p className="profile-form-text">+1 (555) 123-4567</p>
+                  <p className="text-gray-500 font-medium">Contact Number</p>
+                  <p className="text-gray-700">+1 (555) 123-4567</p>
                 </div>
                 <div>
-                  <label className="profile-form-label">Email</label>
-                  <p className="profile-form-text">contact@fintechsolutions.com</p>
+                  <p className="text-gray-500 font-medium">Email</p>
+                  <p className="text-gray-700">contact@fintechsolutions.com</p>
                 </div>
               </div>
             </div>
 
-            <div className="profile-section-divider">
-              <h2 className="profile-section-title">User Details</h2>
-              <form onSubmit={handleSubmit}>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="mb-4">
-                    <label className="profile-form-label" htmlFor="username">
-                      Username
-                    </label>
-                    <input
-                      className="profile-form-input"
-                      id="username"
-                      type="text"
-                      placeholder="Username"
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                    />
-                  </div>
-                  <div className="mb-4">
-                    <label className="profile-form-label" htmlFor="email">
-                      Email
-                    </label>
-                    <input
-                      className="profile-form-input"
-                      id="email"
-                      type="email"
-                      placeholder="Email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                  </div>
-                  <div className="mb-4">
-                    <label className="profile-form-label">Role</label>
-                    <p className="profile-form-text">Administrator</p>
-                  </div>
-                  <div className="mb-4">
-                    <label className="profile-form-label">Department</label>
-                    <p className="profile-form-text">IT</p>
-                  </div>
+            {/* User Details Form */}
+            <div className="bg-gray-50 p-4 rounded-lg shadow-inner">
+              <h2 className="text-lg font-semibold text-gray-700 mb-4">User Details</h2>
+              <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-gray-500 font-medium mb-1" htmlFor="username">
+                    Username
+                  </label>
+                  <input
+                    type="text"
+                    id="username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
                 </div>
-                <div className="flex items-center">
-                  <button className="profile-update-button" type="submit">
+                <div>
+                  <label className="block text-gray-500 font-medium mb-1" htmlFor="email">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+                <div>
+                  <p className="text-gray-500 font-medium mb-1">Role</p>
+                  <p className="text-gray-700">Administrator</p>
+                </div>
+                <div>
+                  <p className="text-gray-500 font-medium mb-1">Department</p>
+                  <p className="text-gray-700">IT</p>
+                </div>
+                <div className="sm:col-span-2 flex justify-start">
+                  <button
+                    type="submit"
+                    className="px-4 py-2 bg-green-500 text-white rounded-lg shadow hover:bg-green-600 transition"
+                  >
                     Update Profile
                   </button>
                 </div>

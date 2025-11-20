@@ -1,16 +1,12 @@
-
 import React, { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { FiDownload, FiEdit, FiCheckCircle, FiXCircle, FiClock, FiUser } from 'react-icons/fi';
-
+import { useParams } from 'react-router-dom';
+import { FiDownload, FiUser, FiCheckCircle, FiXCircle, FiClock } from 'react-icons/fi';
 
 const ValuationDetails = () => {
   const { id } = useParams();
 
-
-  // Dummy data - replace with API call
   const [valuation, setValuation] = useState({
-    id: id,
+    id,
     propertyType: 'Residential Apartment',
     address: 'A-123, Skyline Apartments, Andheri West, Mumbai, 400058',
     requestDate: '2025-11-03',
@@ -38,90 +34,72 @@ const ValuationDetails = () => {
     ],
   });
 
+  const employees = ['Ravi Sharma', 'Priya Singh', 'Amit Patel', 'Sunita Williams'];
+
   const handleUpdateStatus = (newStatus) => {
-    // Add a new history event
     const newHistoryEvent = {
       date: new Date().toISOString().split('T')[0],
       event: `Status updated to ${newStatus}`,
     };
-
-    setValuation(prevValuation => ({
-      ...prevValuation,
-      status: newStatus,
-      history: [newHistoryEvent, ...prevValuation.history],
-    }));
+    setValuation(prev => ({ ...prev, status: newStatus, history: [newHistoryEvent, ...prev.history] }));
   };
-
-  const getStatusIcon = (status) => {
-    switch (status) {
-      case 'Completed':
-        return <FiCheckCircle className="text-green-500" />;
-      case 'Pending':
-        return <FiClock className="text-yellow-500" />;
-      case 'Rejected':
-        return <FiXCircle className="text-red-500" />;
-      default:
-        return <FiClock className="text-gray-500" />;
-    }
-  };
-
-
-  const employees = ['Ravi Sharma', 'Priya Singh', 'Amit Patel', 'Sunita Williams'];
 
   const handleAssign = (employee) => {
     const newHistoryEvent = {
       date: new Date().toISOString().split('T')[0],
       event: `Assigned to ${employee}`,
     };
+    setValuation(prev => ({ ...prev, assignedTo: employee, history: [newHistoryEvent, ...prev.history] }));
+  };
 
-    setValuation(prevValuation => ({
-      ...prevValuation,
-      assignedTo: employee,
-      history: [newHistoryEvent, ...prevValuation.history],
-    }));
+  const getStatusIcon = (status) => {
+    switch (status) {
+      case 'Completed': return <FiCheckCircle className="text-green-500" />;
+      case 'Pending': return <FiClock className="text-yellow-500" />;
+      case 'Rejected': return <FiXCircle className="text-red-500" />;
+      default: return <FiClock className="text-gray-500" />;
+    }
   };
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
+    <div className="p-4 md:p-6 bg-gray-50 min-h-screen">
+
       {/* Header */}
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Valuation Details</h1>
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Valuation Details</h1>
           <p className="text-sm text-gray-500">Valuation ID: {valuation.id}</p>
         </div>
-        <div className="flex gap-3">
-          <div className="relative inline-block text-left">
-            <select
-              onChange={(e) => handleUpdateStatus(e.target.value)}
-              value={valuation.status}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2"
-            >
-              <option value="Pending">Pending</option>
-              <option value="In Progress">In Progress</option>
-              <option value="Completed">Completed</option>
-            </select>
-          </div>
-          <div className="relative inline-block text-left">
-            <div>
-              <select
-                onChange={(e) => handleAssign(e.target.value)}
-                value={valuation.assignedTo}
-                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center gap-2"
-              >
-                {employees.map(emp => <option key={emp} value={emp}>{emp}</option>)}
-              </select>
-            </div>
-          </div>
+
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full md:w-auto">
+          <select
+            onChange={(e) => handleUpdateStatus(e.target.value)}
+            value={valuation.status}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 w-full sm:w-auto"
+          >
+            <option value="Pending">Pending</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
+          </select>
+          <select
+            onChange={(e) => handleAssign(e.target.value)}
+            value={valuation.assignedTo}
+            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 w-full sm:w-auto"
+          >
+            {employees.map(emp => <option key={emp} value={emp}>{emp}</option>)}
+          </select>
         </div>
       </div>
 
-      {/* Main Content */}
+      {/* Main Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left Column - Valuation Info */}
-        <div className="lg:col-span-2 bg-white p-6 rounded-lg shadow-md">
-          <div className="border-b pb-4 mb-4">
+
+        {/* Left Column */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* Property Info */}
+          <div className="bg-white p-6 rounded-lg shadow-md">
             <h2 className="text-xl font-semibold mb-4">Property Information</h2>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <p className="text-sm text-gray-500">Property Type</p>
                 <p className="font-medium">{valuation.propertyType}</p>
@@ -141,9 +119,10 @@ const ValuationDetails = () => {
             </div>
           </div>
 
-          <div className="border-b pb-4 mb-4">
+          {/* Valuation Assessment */}
+          <div className="bg-white p-6 rounded-lg shadow-md">
             <h2 className="text-xl font-semibold mb-4">Valuation Assessment</h2>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <p className="text-sm text-gray-500">Estimated Value</p>
                 <p className="font-medium text-blue-600">{valuation.estimatedValue}</p>
@@ -160,16 +139,15 @@ const ValuationDetails = () => {
               </div>
               <div>
                 <p className="text-sm text-gray-500">Status</p>
-                <p className="font-medium flex items-center gap-2">
-                  {getStatusIcon(valuation.status)} {valuation.status}
-                </p>
+                <p className="font-medium flex items-center gap-2">{getStatusIcon(valuation.status)} {valuation.status}</p>
               </div>
             </div>
           </div>
 
-          <div>
+          {/* Client Info */}
+          <div className="bg-white p-6 rounded-lg shadow-md">
             <h2 className="text-xl font-semibold mb-4">Client Information</h2>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <p className="text-sm text-gray-500">Name</p>
                 <p className="font-medium">{valuation.client.name}</p>
@@ -188,31 +166,32 @@ const ValuationDetails = () => {
 
         {/* Right Column - Documents & History */}
         <div className="space-y-6">
+          {/* Documents */}
           <div className="bg-white p-6 rounded-lg shadow-md">
             <h2 className="text-xl font-semibold mb-4">Documents</h2>
             <ul className="space-y-3">
-              {valuation.documents.map((doc, index) => (
-                <li key={index} className="flex justify-between items-center">
+              {valuation.documents.map((doc, idx) => (
+                <li key={idx} className="flex justify-between items-center">
                   <span className="text-gray-700">{doc.name}</span>
                   <a 
                     href={doc.url} 
                     download={`${doc.name.replace(/\s+/g, '_')}.pdf`}
                     className="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 flex items-center gap-2"
                   >
-                    <FiDownload />
-                    Download
+                    <FiDownload /> Download
                   </a>
                 </li>
               ))}
             </ul>
           </div>
 
+          {/* History */}
           <div className="bg-white p-6 rounded-lg shadow-md">
             <h2 className="text-xl font-semibold mb-4">Valuation History</h2>
             <ul className="space-y-4">
-              {valuation.history.map((item, index) => (
-                <li key={index} className="flex items-start">
-                  <div className="w-4 h-4 bg-blue-500 rounded-full mt-1.5 mr-3"></div>
+              {valuation.history.map((item, idx) => (
+                <li key={idx} className="flex items-start gap-3">
+                  <div className="w-3 h-3 bg-blue-500 rounded-full mt-2"></div>
                   <div>
                     <p className="font-medium text-gray-800">{item.event}</p>
                     <p className="text-sm text-gray-500">{item.date}</p>
@@ -222,9 +201,8 @@ const ValuationDetails = () => {
             </ul>
           </div>
         </div>
+
       </div>
-
-
     </div>
   );
 };

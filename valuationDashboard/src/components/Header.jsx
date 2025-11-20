@@ -1,58 +1,66 @@
-import React from 'react';
-import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { Bars3Icon } from "@heroicons/react/24/outline";
 
-const Header = () => {
+const Header = ({ setMobileSidebarOpen }) => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate("/login");
   };
 
   return (
-    <header className="bg-white shadow-md py-4 px-6">
-      <div className="flex justify-between items-center">
-        <div className="flex items-center">
-          <img 
-            src="/logo.png" 
-            alt="BRD Logo" 
-            className="h-10 w-auto"
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.src = 'https://via.placeholder.com/40x40?text=BRD';
-            }}
-          />
-          <span className="ml-3 text-xl font-semibold text-gray-800">BRD Portal</span>
+    <header className="bg-white shadow-md py-4 px-6 flex justify-between items-center">
+      <div className="flex items-center">
+        {/* Hamburger only on mobile */}
+        <button
+          className="lg:hidden mr-4 text-gray-800"
+          onClick={() => setMobileSidebarOpen(true)}
+        >
+          <Bars3Icon className="w-6 h-6" />
+        </button>
+
+        <img
+          src="/logo.png"
+          alt="BRD Logo"
+          className="h-10 w-auto"
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = "https://via.placeholder.com/40x40?text=BRD";
+          }}
+        />
+        <span className="ml-3 text-xl font-semibold text-gray-800">
+          BRD Portal
+        </span>
+      </div>
+
+      <div className="flex items-center gap-4">
+        {/* User info: hidden on mobile, visible from md */}
+        <div className="hidden md:text-right md:mr-4 md:flex md:flex-col">
+          <p className="text-sm font-medium text-gray-900">
+            {user?.name || "User"}
+          </p>
+          <p className="text-xs text-gray-500">
+            {user?.role?.charAt(0).toUpperCase() + user?.role?.slice(1)}
+          </p>
         </div>
 
-        <div className="flex items-center gap-4">
-          <div className="text-right mr-4">
-            <p className="text-sm font-medium text-gray-900">{user?.name || 'User'}</p>
-            <p className="text-xs text-gray-500">{user?.role?.charAt(0).toUpperCase() + user?.role?.slice(1)}</p>
-          </div>
-          
-          <button
-            onClick={() => navigate('/profile')}
-            className="px-4 py-2 bg-linear-to-r from-blue-500 to-blue-600 text-white rounded-lg
-                     shadow-lg transform transition-all duration-150 ease-in-out
-                     hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0
-                     focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-          >
-            Profile
-          </button>
-          
-          <button
-            onClick={handleLogout}
-            className="px-4 py-2 bg-linear-to-r from-red-500 to-red-600 text-white rounded-lg
-                     shadow-lg transform transition-all duration-150 ease-in-out
-                     hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0
-                     focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
-          >
-            Logout
-          </button>
-        </div>
+        <button
+          onClick={() => navigate("/profile")}
+          className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow hover:shadow-lg"
+        >
+          Profile
+        </button>
+
+        <button
+          onClick={handleLogout}
+          className="px-4 py-2 bg-red-500 text-white rounded-lg shadow hover:shadow-lg"
+        >
+          Logout
+        </button>
       </div>
     </header>
   );

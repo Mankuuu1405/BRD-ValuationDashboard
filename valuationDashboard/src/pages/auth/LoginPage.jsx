@@ -64,8 +64,8 @@ const LoginPage = () => {
   return (
     <div className="relative flex items-center justify-center min-h-screen bg-gray-900 overflow-hidden">
       {/* animated background blobs */}
-      <div className="absolute -top-32 -left-32 w-80 h-80 bg-gradient-to-br from-teal-400 to-blue-500 rounded-full opacity-40 blur-3xl animate-blob" />
-      <div className="absolute -bottom-32 -right-20 w-72 h-72 bg-gradient-to-tr from-pink-500 to-yellow-400 rounded-full opacity-30 blur-3xl animate-blob animation-delay-2000" />
+      <div className="absolute -top-32 -left-32 w-80 h-80 bg-linear-to-br from-teal-400 to-blue-500 rounded-full opacity-40 blur-3xl animate-blob" />
+      <div className="absolute -bottom-32 -right-20 w-72 h-72 bg-linear-to-tr from-pink-500 to-yellow-400 rounded-full opacity-30 blur-3xl animate-blob animation-delay-2000" />
 
       <div className="relative z-10 p-8 bg-white rounded-lg shadow-xl w-full max-w-md">
         <h2 className="text-2xl font-bold text-center mb-6">BRD Login</h2>
