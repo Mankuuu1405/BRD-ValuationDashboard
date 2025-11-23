@@ -288,7 +288,7 @@ const FieldVerifications = () => {
                       {verification.status === "Completed" && (
                         <button
                           onClick={() => handleViewReport(verification.id)}
-                          className="text-indigo-600 hover:text-indigo-900"
+                          className="text-blue-600 hover:text-blue-900"
                         >
                           View Report
                         </button>
@@ -381,7 +381,7 @@ const FieldVerifications = () => {
                   {verification.status === "Completed" && (
                     <button
                       onClick={() => handleViewReport(verification.id)}
-                      className="text-indigo-600 hover:text-indigo-900 text-sm"
+                      className="text-blue-600 hover:text-blue-900 text-sm"
                     >
                       View Report
                     </button>
