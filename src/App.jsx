@@ -13,7 +13,6 @@ import AllUsersPage from "./pages/auth/AllUsersPage.jsx";
 // Dashboard root pages (index pages for each department)
 
 import ValuationDashboard from "./pages/dashboard/ValuationDashboard.jsx";
-import Dashboard from "./pages/dashboard/Dashboard.jsx";
 
 // Department subpages
 
@@ -50,16 +49,7 @@ const router = createBrowserRouter([
   { path: '/signup', element: <SignupPage /> },
   { path: '/all-users', element: <AllUsersPage /> },
 
-  // Dashboard route
-  {
-    element: <ProtectedRoute allowedRoles={["sales", "credit", "legal", "valuation", "finance", "compliance"]} />,
-    children: [
-      {
-        path: '/dashboard',
-        element: <Dashboard />,
-      },
-    ],
-  },
+  
 
   
   // Valuation routes

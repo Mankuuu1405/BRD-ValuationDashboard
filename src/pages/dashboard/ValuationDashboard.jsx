@@ -89,7 +89,7 @@ const ValuationDashboard = () => {
       />
       <GenerateReportModal
         isOpen={isGenerateReportModalOpen}
-        onClose={() => setGenerateReportModalOpen(false)}
+        onRequestClose={() => setGenerateReportModalOpen(false)}
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
