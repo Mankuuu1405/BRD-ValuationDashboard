@@ -1,53 +1,74 @@
 // src/pages/auth/LoginPage.jsx
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { useAuth } from "../../context/AuthContext.jsx";
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link } from "react-router-dom";
 
 const LoginPage = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
   const [error, setError] = useState(null);
+
+  React.useEffect(() => {
+    const savedEmail = localStorage.getItem("remember_email");
+    if (savedEmail) setEmail(savedEmail);
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setError(null);
 
     try {
-      const usersRaw = localStorage.getItem('mock_users');
+      const usersRaw = localStorage.getItem("mock_users");
       const users = usersRaw ? JSON.parse(usersRaw) : [];
-      const found = users.find(u => u.email === email);
+      const found = users.find((u) => u.email === email);
       if (!found) {
-        setError('No account found for this email. Please sign up.');
+        setError("No account found for this email. Please sign up.");
         return;
       }
       if (found.password !== password) {
-        setError('Incorrect password.');
+        setError("Incorrect password.");
         return;
       }
 
-      const userObj = { email: found.email, role: found.role, name: found.name };
+      if (rememberMe) {
+        localStorage.setItem("remember_email", email);
+      } else {
+        localStorage.removeItem("remember_email");
+      }
+
+      const userObj = {
+        email: found.email,
+        role: found.role,
+        name: found.name,
+      };
       login(userObj);
       navigate(`/${found.role}`);
     } catch {
-      login({ email, role: 'sales' });
-      navigate('/sales');
+      login({ email, role: "sales" });
+      navigate("/sales");
     }
   };
 
   return (
     <div className="relative flex items-center justify-center min-h-screen bg-gray-50 overflow-hidden">
-     
       <div className="relative z-10 w-full max-w-md p-8 bg-white rounded-2xl shadow-xl">
-        <h2 className="text-2xl font-bold text-center mb-2 text-gray-800">Login to Your Account</h2>
-        <p className="text-center text-gray-500 mb-6 text-sm">Sign In to join the Valuation Dashboard</p>
+        <h2 className="text-2xl font-bold text-center mb-2 text-gray-800">
+          Login to Your Account
+        </h2>
+        <p className="text-center text-gray-500 mb-6 text-sm">
+          Sign In to join the Valuation Dashboard
+        </p>
 
         <form onSubmit={handleSubmit}>
           {/* Email */}
           <div className="mb-4">
-            <label className="block text-gray-700 font-medium mb-1">Email</label>
+            <label className="block text-gray-700 font-medium mb-1">
+              Email
+            </label>
             <input
               type="email"
               value={email}
@@ -68,15 +89,30 @@ const LoginPage = () => {
             toggleShow={() => setShowPassword(!showPassword)}
           />
 
-          {/* Forgot password */}
-          <div className="mb-6 text-right">
-            <Link to="/forgot-password" className="text-sm text-blue-600 hover:underline">
+          {/* Remember me + Forgot password */}
+          <div className="flex items-center justify-between mb-4">
+            <label className="flex items-center space-x-2 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              />
+              <span className="text-gray-700 text-sm">Remember Me</span>
+            </label>
+
+            <Link
+              to="/forgot-password"
+              className="text-sm text-blue-600 hover:underline"
+            >
               Forgot Password?
             </Link>
           </div>
 
           {/* Error message */}
-          {error && <p className="text-center text-sm text-red-500 mb-4">{error}</p>}
+          {error && (
+            <p className="text-center text-sm text-red-500 mb-4">{error}</p>
+          )}
 
           {/* Submit */}
           <button
@@ -88,8 +124,11 @@ const LoginPage = () => {
         </form>
 
         <p className="mt-6 text-center text-sm text-gray-600">
-          Don't have an account?{' '}
-          <Link to="/signup" className="text-blue-600 hover:underline font-medium">
+          Don't have an account?{" "}
+          <Link
+            to="/signup"
+            className="text-blue-600 hover:underline font-medium"
+          >
             Sign Up
           </Link>
         </p>
@@ -119,7 +158,7 @@ function PasswordField({ label, name, value, onChange, show, toggleShow }) {
       <label className="block text-gray-700 font-medium mb-1">{label}</label>
       <div className="relative">
         <input
-          type={show ? 'text' : 'password'}
+          type={show ? "text" : "password"}
           name={name}
           value={value}
           onChange={onChange}
@@ -132,7 +171,7 @@ function PasswordField({ label, name, value, onChange, show, toggleShow }) {
           onClick={toggleShow}
           className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 font-medium focus:outline-none"
         >
-          {show ? 'Hide' : 'Show'}
+          {show ? "Hide" : "Show"}
         </button>
       </div>
     </div>
