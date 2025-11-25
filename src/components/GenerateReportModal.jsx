@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import Modal from 'react-modal';
+import React, { useState } from "react";
+import Modal from "react-modal";
 
 const GenerateReportModal = ({ isOpen, onRequestClose }) => {
-  const [reportType, setReportType] = useState('summary');
-  const [dateRange, setDateRange] = useState({ from: '', to: '' });
+  const [reportType, setReportType] = useState("summary");
+  const [dateRange, setDateRange] = useState({ from: "", to: "" });
   const [isGenerating, setIsGenerating] = useState(false);
 
   const handleGenerate = async () => {
     if (!dateRange.from || !dateRange.to) {
-      alert('Please select a valid date range.');
+      alert("Please select a valid date range.");
       return;
     }
 
@@ -16,10 +16,12 @@ const GenerateReportModal = ({ isOpen, onRequestClose }) => {
     try {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1500));
-      alert(`Generating a ${reportType} report from ${dateRange.from} to ${dateRange.to}.`);
+      alert(
+        `Generating a ${reportType} report from ${dateRange.from} to ${dateRange.to}.`
+      );
       onRequestClose();
     } catch (error) {
-      alert('Failed to generate report. Please try again.');
+      alert("Failed to generate report. Please try again.");
     } finally {
       setIsGenerating(false);
     }
@@ -30,14 +32,16 @@ const GenerateReportModal = ({ isOpen, onRequestClose }) => {
       isOpen={isOpen}
       onRequestClose={onRequestClose}
       contentLabel="Generate New Report"
-      className="bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto mt-20"
-      overlayClassName="fixed inset-0 bg-black/40 backdrop-blur-sm"
+      className="bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto mt-20 relative z-50"
+      overlayClassName="fixed inset-0 bg-black/40 backdrop-blur-sm z-40" 
     >
       <h2 className="text-xl font-bold mb-4">Generate New Report</h2>
-      
+
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700">Report Type</label>
+          <label className="block text-sm font-medium text-gray-700">
+            Report Type
+          </label>
           <select
             value={reportType}
             onChange={(e) => setReportType(e.target.value)}
@@ -50,19 +54,25 @@ const GenerateReportModal = ({ isOpen, onRequestClose }) => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700">Date Range</label>
+          <label className="block text-sm font-medium text-gray-700">
+            Date Range
+          </label>
           <div className="flex gap-2 mt-1">
             <input
               type="date"
               value={dateRange.from}
-              onChange={(e) => setDateRange({ ...dateRange, from: e.target.value })}
+              onChange={(e) =>
+                setDateRange({ ...dateRange, from: e.target.value })
+              }
               className="w-full px-3 py-2 border rounded-md"
             />
             <span className="self-center">to</span>
             <input
               type="date"
               value={dateRange.to}
-              onChange={(e) => setDateRange({ ...dateRange, to: e.target.value })}
+              onChange={(e) =>
+                setDateRange({ ...dateRange, to: e.target.value })
+              }
               className="w-full px-3 py-2 border rounded-md"
             />
           </div>
@@ -82,7 +92,7 @@ const GenerateReportModal = ({ isOpen, onRequestClose }) => {
           className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
           disabled={isGenerating}
         >
-          {isGenerating ? 'Generating...' : 'Generate'}
+          {isGenerating ? "Generating..." : "Generate"}
         </button>
       </div>
     </Modal>
