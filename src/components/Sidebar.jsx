@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import AccessDeniedModal from "./AccessDeniedModal";
 import {
@@ -7,132 +7,146 @@ import {
   UserGroupIcon,
   ClipboardDocumentCheckIcon,
   BuildingLibraryIcon,
-  ArrowLeftStartOnRectangleIcon
+  ArrowLeftStartOnRectangleIcon,
+  ShieldCheckIcon,
 } from "@heroicons/react/24/outline";
 
-const SidebarLink = ({ to, children, icon: Icon, onClick }) => (
-  <NavLink
-    to={to}
-    end
-    onClick={onClick}
-    className={({ isActive }) =>
-      `flex items-center px-4 py-3 rounded-lg transition-all duration-200 text-base group
-      ${
-        isActive
-          ? "bg-blue-50 text-blue-500 shadow-md font-medium"
-          : "text-gray-400 hover:bg-blue-50 hover:text-blue-500"
-      }`
-    }
-  >
-    {Icon && (
-      <Icon className="w-5 h-5 mr-3 transition-transform duration-200 group-hover:scale-110" />
-    )}
-    {children}
-  </NavLink>
-);
+const primary = {
+  50: "#eff6ff",
+  600: "#2563eb",
+  700: "#1d4ed8",
+};
 
 const Sidebar = ({ mobileSidebarOpen, setMobileSidebarOpen }) => {
   const { user, logout } = useAuth();
   const [showAccessDeniedModal, setShowAccessDeniedModal] =
     React.useState(false);
+  const location = useLocation();
 
-  const renderValuationNav = () => (
-    <div className="mb-6">
-      <h3 className="px-4 text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">
-        Valuation
-      </h3>
+  const items = [
+    { key: "dashboard", label: "Dashboard", icon: HomeIcon, to: "/valuation" },
+    {
+      key: "field-verifications",
+      label: "Field Verifications",
+      icon: BuildingLibraryIcon,
+      to: "/valuation/field-verifications",
+    },
+    {
+      key: "property-checks",
+      label: "Property Checks",
+      icon: ClipboardDocumentCheckIcon,
+      to: "/valuation/property-checks",
+    },
+  ];
 
-      <ul className="space-y-2">
-        <li>
-          <SidebarLink
-            to="/valuation"
-            icon={HomeIcon}
-            onClick={() => setMobileSidebarOpen(false)}
-          >
-            Dashboard
-          </SidebarLink>
-        </li>
-
-        <li>
-          <SidebarLink
-            to="/valuation/field-verifications"
-            icon={BuildingLibraryIcon}
-            onClick={() => setMobileSidebarOpen(false)}
-          >
-            Field Verifications
-          </SidebarLink>
-        </li>
-
-        <li>
-          <SidebarLink
-            to="/valuation/property-checks"
-            icon={ClipboardDocumentCheckIcon}
-            onClick={() => setMobileSidebarOpen(false)}
-          >
-            Property Checks
-          </SidebarLink>
-        </li>
-        
-      </ul>
-
-      <div className="absolute bottom-6 left-0 w-full px-4">
-  <button
-    onClick={logout}
-    className="flex items-center px-4 py-3 rounded-lg text-base
-               text-red-500 hover:text-red-600 hover:bg-red-50
-               transition-all duration-200 w-full"
-  >
-    <ArrowLeftStartOnRectangleIcon className="w-5 h-5 mr-3" />
-    Logout
-  </button>
-</div>
-
-    </div>
-  );
-
-  const renderNavigation = () => {
-    switch (user?.role) {
-      case "valuation":
-        return renderValuationNav();
-      default:
-        return null;
-    }
+  const renderButton = (item) => {
+    const isActive = location.pathname === item.to;
+    return (
+      <button
+        key={item.key}
+        onClick={() => (window.location.href = item.to)}
+        style={{
+          backgroundColor: isActive ? primary[50] : "white",
+          color: isActive ? primary[700] : "black",
+        }}
+        onMouseEnter={(e) => {
+          if (!isActive) {
+            e.currentTarget.style.backgroundColor = primary[50];
+            e.currentTarget.style.color = primary[700];
+            const icon = e.currentTarget.querySelector("svg");
+            if (icon) icon.style.color = primary[600];
+          }
+        }}
+        onMouseLeave={(e) => {
+          if (!isActive) {
+            e.currentTarget.style.backgroundColor = "white";
+            e.currentTarget.style.color = "black";
+            const icon = e.currentTarget.querySelector("svg");
+            if (icon) icon.style.color = "black";
+          }
+        }}
+        className="w-full flex items-center gap-3 px-4 py-3 text-base rounded-lg transition-all"
+      >
+        <item.icon
+          className="h-5 w-5"
+          style={{ color: isActive ? primary[600] : "black" }}
+        />
+        <span>{item.label}</span>
+      </button>
+    );
   };
+
+  const renderAllUsersButton = () => (
+    <button
+      onClick={() => setShowAccessDeniedModal(true)}
+      style={{ backgroundColor: "white", color: "black" }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.backgroundColor = primary[50];
+        e.currentTarget.style.color = primary[700];
+        const icon = e.currentTarget.querySelector("svg");
+        if (icon) icon.style.color = primary[600];
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.backgroundColor = "white";
+        e.currentTarget.style.color = "black";
+        const icon = e.currentTarget.querySelector("svg");
+        if (icon) icon.style.color = "black";
+      }}
+      className="w-full flex items-center gap-3 px-4 py-3 text-base rounded-lg transition-all mt-4"
+    >
+      <UserGroupIcon className="h-5 w-5" style={{ color: "black" }} />
+      All Users
+    </button>
+  );
 
   return (
     <>
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:block w-72 bg-white text-gray-400 min-h-screen fixed left-0 top-0 overflow-y-auto border-r border-gray-200">
-        <div className="sticky top-0 bg-white z-10 p-6 border-b border-gray-100">
-          <h2 className="text-2xl font-bold text-black">BRD Portal</h2>
-          {user && (
-            <p className="text-sm text-gray-400 mt-1">
-              {user.role.charAt(0).toUpperCase() + user.role.slice(1)} Dashboard
-            </p>
-          )}
+      <aside className="hidden lg:flex flex-col fixed inset-y-0 left-0 w-64 bg-white border-r border-gray-200">
+        <div className="h-16 flex items-center px-4 gap-3 border-b border-gray-100">
+          <div
+            className="h-9 w-9 rounded-xl grid place-items-center"
+            style={{ backgroundColor: primary[600], color: "white" }}
+          >
+            <ShieldCheckIcon className="h-5 w-5" />
+          </div>
+          <div className="flex flex-col">
+            <div className="text-base font-semibold">Valuation Dashboard</div>
+            <div className="text-xs" style={{ color: "#6b7280" }}>
+              Admin Panel
+            </div>
+          </div>
         </div>
 
-        <nav className="p-4">
-          <div className="mb-6">
-            <h3 className="px-4 text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
-              Pages
-            </h3>
+        <nav className="flex-1 overflow-y-auto py-2">
+          {items.map(renderButton)}
 
-            <ul className="space-y-2">
-              <li>
-                <button
-                  onClick={() => setShowAccessDeniedModal(true)}
-                  className="flex items-center px-4 py-3 rounded-lg text-base group text-gray-400 hover:bg-blue-50 hover:text-blue-500 w-full text-left"
-                >
-                  <UserGroupIcon className="w-5 h-5 mr-3" />
-                  All Users
-                </button>
-              </li>
-            </ul>
+          <div
+            className="mt-6 px-4 text-sm font-semibold uppercase tracking-wider"
+            style={{ color: "#9ca3af" }}
+          >
+            Pages
           </div>
 
-          {renderNavigation()}
+          {renderAllUsersButton()}
         </nav>
+
+        <div className="p-2 border-t border-gray-100 mt-auto">
+          <button
+            onClick={logout}
+            style={{ color: "#dc2626", backgroundColor: "white" }}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.backgroundColor = "#fef2f2")
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.backgroundColor = "white")
+            }
+            className="w-full flex items-center gap-3 px-4 py-3 text-base rounded-lg transition-all"
+          >
+            <ArrowLeftStartOnRectangleIcon className="h-5 w-5" />
+            Logout
+          </button>
+        </div>
       </aside>
 
       {/* Mobile Sidebar */}
@@ -141,11 +155,26 @@ const Sidebar = ({ mobileSidebarOpen, setMobileSidebarOpen }) => {
           mobileSidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="p-6 border-b border-gray-200 flex justify-between items-center">
-          <h2 className="text-2xl font-bold text-black">BRD Portal</h2>
+        <div className="p-4 border-b border-gray-200 flex items-center gap-3">
+          {/* Icon */}
+          <div
+            className="h-8 w-8 rounded-xl grid place-items-center flex-shrink-0"
+            style={{ backgroundColor: primary[600], color: "white" }}
+          >
+            <ShieldCheckIcon className="h-4 w-4" />
+          </div>
 
+          {/* Title + Subtitle */}
+          <div className="flex-1 flex flex-col truncate">
+            <span className="text-sm font-semibold truncate">
+              Valuation Dashboard
+            </span>
+            <span className="text-xs text-gray-500 truncate">Admin Panel</span>
+          </div>
+
+          {/* Close Button */}
           <button
-            className="text-gray-500 hover:text-black"
+            className="ml-2 text-gray-500 hover:text-black flex-shrink-0"
             onClick={() => setMobileSidebarOpen(false)}
           >
             ✕
@@ -153,29 +182,65 @@ const Sidebar = ({ mobileSidebarOpen, setMobileSidebarOpen }) => {
         </div>
 
         <nav className="p-4">
-          <div className="mb-6">
-            <h3 className="px-4 text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
-              Pages
-            </h3>
+          {items.map((item) => {
+            const isActive = location.pathname === item.to;
+            return (
+              <button
+                key={item.key}
+                onClick={() => {
+                  window.location.href = item.to;
+                  setMobileSidebarOpen(false);
+                }}
+                style={{
+                  backgroundColor: isActive ? primary[50] : "white",
+                  color: isActive ? primary[700] : "black",
+                }}
+                onMouseEnter={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.backgroundColor = primary[50];
+                    e.currentTarget.style.color = primary[700];
+                    const icon = e.currentTarget.querySelector("svg");
+                    if (icon) icon.style.color = primary[600];
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.backgroundColor = "white";
+                    e.currentTarget.style.color = "black";
+                    const icon = e.currentTarget.querySelector("svg");
+                    if (icon) icon.style.color = "black";
+                  }
+                }}
+                className="w-full flex items-center gap-3 px-4 py-3 text-base rounded-lg transition-all"
+              >
+                <item.icon
+                  className="h-5 w-5"
+                  style={{ color: isActive ? primary[600] : "black" }}
+                />
+                {item.label}
+              </button>
+            );
+          })}
 
-            <ul className="space-y-2">
-              <li>
-                <button
-                  onClick={() => {
-                    setShowAccessDeniedModal(true);
-                    setMobileSidebarOpen(false);
-                  }}
-                  className="flex items-center px-4 py-3 rounded-lg text-base group text-gray-500 hover:bg-blue-50 hover:text-blue-500 w-full text-left"
-                >
-                  <UserGroupIcon className="w-5 h-5 mr-3" />
-                  All Users
-                </button>
-              </li>
-            </ul>
-          </div>
-
-          {renderNavigation()}
+          {renderAllUsersButton()}
         </nav>
+
+        <div className="p-2 border-t border-gray-100 mt-auto">
+          <button
+            onClick={logout}
+            style={{ color: "#dc2626", backgroundColor: "white" }}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.backgroundColor = "#fef2f2")
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.backgroundColor = "white")
+            }
+            className="w-full flex items-center gap-3 px-4 py-3 text-base rounded-lg transition-all"
+          >
+            <ArrowLeftStartOnRectangleIcon className="h-5 w-5" />
+            Logout
+          </button>
+        </div>
       </div>
 
       <AccessDeniedModal

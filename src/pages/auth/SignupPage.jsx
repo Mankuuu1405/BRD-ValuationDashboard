@@ -1,200 +1,14 @@
-// import React, { useState } from 'react';
-// import { Link, useNavigate } from 'react-router-dom';
-
-// const SignupPage = () => {
-//   const [formData, setFormData] = useState({
-//     name: '',
-//     email: '',
-//     role: 'sales', // Default role
-//     password: '',
-//     confirmPassword: '',
-//   });
-
-//   const [error, setError] = useState(null);
-//   const [success, setSuccess] = useState(null);
-//   const [loading, setLoading] = useState(false);
-//   const navigate = useNavigate();
-
-//   const handleChange = (e) => {
-//     setFormData({ ...formData, [e.target.name]: e.target.value });
-//   };
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     setError(null);
-//     setSuccess(null);
-
-//     // --- Frontend Validation ---
-//     if (formData.password !== formData.confirmPassword) {
-//       setError("Passwords do not match.");
-//       return;
-//     }
-//     if (formData.password.length < 8) {
-//       setError("Password must be at least 8 characters long.");
-//       return;
-//     }
-
-//     setLoading(true);
-
-//     try {
-//         // --- MOCK API CALL ---
-//         // Save the user to localStorage so login can pick up role
-//         const usersRaw = localStorage.getItem('mock_users');
-//         const users = usersRaw ? JSON.parse(usersRaw) : [];
-
-//         // Prevent duplicate emails
-//         if (users.find(u => u.email === formData.email)) {
-//           setError('An account with this email already exists. Please login.');
-//           setLoading(false);
-//           return;
-//         }
-
-//         const newUser = {
-//           name: formData.name,
-//           email: formData.email,
-//           role: formData.role,
-//           password: formData.password, // plain text for mock only
-//         };
-
-//         users.push(newUser);
-//         localStorage.setItem('mock_users', JSON.stringify(users));
-
-//         console.log("Saved mock user:", newUser);
-
-//         // Simulate network delay
-//         await new Promise(resolve => setTimeout(resolve, 800));
-
-//         // Assuming the API call is successful
-//         setSuccess("Registration successful! Redirecting to login...");
-
-//         // Redirect to login page after a short delay
-//         setTimeout(() => {
-//           navigate('/login');
-//         }, 1200);
-
-//     } catch (apiError) {
-//       // Example of handling an error from the backend (e.g., email already exists)
-//       setError(apiError.response?.data?.message || "Registration failed. Please try again.");
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-  
-//   // List of roles for the dropdown
-//   const roles = [
-//     { value: 'sales', label: 'Sales / CRM' },
-//     { value: 'credit', label: 'Credit Team' },
-//     { value: 'legal', label: 'Legal Team' },
-//     { value: 'valuation', label: 'Valuation / Verification' },
-//     { value: 'finance', label: 'Finance Team' },
-//     { value: 'compliance', label: 'Compliance' },
-//   ];
-
-//   return (
-//     <div className="relative flex items-center justify-center min-h-screen bg-gray-900 overflow-hidden">
-//       {/* animated background blobs */}
-//       <div className="absolute -top-28 -left-28 w-72 h-72 bg-gradient-to-br from-purple-400 to-blue-500 rounded-full opacity-30 blur-3xl animate-blob" />
-//       <div className="absolute -bottom-28 -right-20 w-72 h-72 bg-gradient-to-tr from-yellow-400 to-pink-500 rounded-full opacity-30 blur-3xl animate-blob animation-delay-2500" />
-
-//       <div className="relative z-10 p-8 bg-white rounded-lg shadow-xl w-full max-w-md">
-//         <h2 className="text-2xl font-bold text-center mb-6">Create Your Account</h2>
-//         <form onSubmit={handleSubmit}>
-//           {/* Form Fields */}
-//           <div className="mb-4">
-//             <label className="block text-gray-700">Full Name</label>
-//             <input type="text" name="name" onChange={handleChange} className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required />
-//           </div>
-//           <div className="mb-4">
-//             <label className="block text-gray-700">Email</label>
-//             <input type="email" name="email" onChange={handleChange} className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required />
-//           </div>
-//           <div className="mb-4">
-//             <label className="block text-gray-700">Department / Role</label>
-//             <select name="role" onChange={handleChange} value={formData.role} className="w-full px-3 py-2 border rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-//               {roles.map(role => (
-//                 <option key={role.value} value={role.value}>{role.label}</option>
-//               ))}
-//             </select>
-//           </div>
-//           <PasswordField name="password" value={formData.password} onChange={handleChange} label="Password" />
-//           <PasswordField name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} label="Confirm Password" />
-
-//           {/* Error and Success Messages */}
-//           {error && <p className="text-red-500 text-sm mb-4 text-center">{error}</p>}
-//           {success && <p className="text-green-500 text-sm mb-4 text-center">{success}</p>}
-
-//           <button type="submit" disabled={loading} className="w-full py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed transition-colors">
-//             {loading ? 'Creating Account...' : 'Sign Up'}
-//           </button>
-//         </form>
-//         <p className="mt-6 text-center text-sm">
-//           Already have an account?{' '}
-//           <Link to="/login" className="text-blue-600 hover:underline">
-//             Login here
-//           </Link>
-//         </p>
-//       </div>
-//       <style>{` 
-//         .animate-blob { animation: blob 8s infinite; }
-//         .animation-delay-2500 { animation-delay: 2.5s; }
-//         @keyframes blob { 0% { transform: translate(0px, 0px) scale(1); } 33% { transform: translate(25px, -15px) scale(1.05); } 66% { transform: translate(-15px, 20px) scale(0.95); } 100% { transform: translate(0px, 0px) scale(1); } }
-//         .blur-3xl { filter: blur(48px); }
-//       `}</style>
-//     </div>
-//   );
-// };
-
-// export default SignupPage;
-
-// // Reusable PasswordField component for Signup page (keeps file self-contained)
-// function PasswordField({ name, value, onChange, label }) {
-//   const [show, setShow] = useState(false);
-//   const [focused, setFocused] = useState(false);
-
-//   return (
-//     <div className="mb-4 relative">
-//       <label className="block text-gray-700">{label}</label>
-//       <div className="mt-1 relative">
-//         <input
-//           type={show ? 'text' : 'password'}
-//           name={name}
-//           value={value}
-//           onChange={onChange}
-//           onFocus={() => setFocused(true)}
-//           onBlur={() => setFocused(false)}
-//           className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 pr-12"
-//           required
-//         />
-//         <button
-//           type="button"
-//           onClick={() => setShow(!show)}
-//           className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1"
-//           aria-label={show ? 'Hide password' : 'Show password'}
-//         >
-//           <div className={`w-9 h-7 flex items-center justify-center ${focused || value.length>0 ? 'scale-90' : ''}`}>
-//             {focused || value.length>0 ? (
-//               <svg width="34" height="24" viewBox="0 0 34 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 12h26" stroke="#374151" strokeWidth="2" strokeLinecap="round"/></svg>
-//             ) : (
-//               <svg width="34" height="24" viewBox="0 0 34 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 12C6 5 12 2 17 2s11 3 15 10c-4 7-10 10-15 10S6 19 2 12z" stroke="#374151" strokeWidth="1.5" fill="none"/><circle cx="17" cy="12" r="3" fill="#374151"/></svg>
-//             )}
-//           </div>
-//         </button>
-//       </div>
-//     </div>
-//   );
-// }
-
-
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { EnvelopeIcon, ShieldCheckIcon } from "@heroicons/react/24/outline";
 
 const SignupPage = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    role: 'valuation',
-    password: '',
-    confirmPassword: '',
+    name: "",
+    email: "",
+    role: "valuation",
+    password: "",
+    confirmPassword: "",
   });
 
   const [error, setError] = useState(null);
@@ -202,121 +16,208 @@ const SignupPage = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+  // Inline primary colors
+  // const primary = {
+  //   50: "#eff6ff",
+  //   200: "#bfdbfe",
+  //   300: "#93c5fd",
+  //   500: "#3b82f6",
+  //   600: "#2563eb",
+  //   700: "#1d4ed8",
+  // };
 
-  const handleSubmit = async (e) => {
+  const primary = {
+    50: "#eff6ff",
+    200: "#bfdbfe",
+    300: "#93c5fd",
+    500: "#3b82f6",
+    600: "#2563eb",
+    700: "#1d4ed8",
+  };
+
+  const handleChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const handleSubmit = (e) => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
 
-    if (formData.password !== formData.confirmPassword) return setError("Passwords do not match.");
-    if (formData.password.length < 8) return setError("Password must be at least 8 characters long.");
+    if (formData.password !== formData.confirmPassword)
+      return setError("Passwords do not match.");
+
+    if (formData.password.length < 8)
+      return setError("Password must be at least 8 characters.");
 
     setLoading(true);
 
     try {
-      const usersRaw = localStorage.getItem('mock_users');
+      const usersRaw = localStorage.getItem("mock_users");
       const users = usersRaw ? JSON.parse(usersRaw) : [];
 
-      if (users.find(u => u.email === formData.email)) {
-        setError('Email already exists. Please login.');
+      if (users.find((u) => u.email === formData.email)) {
+        setError("Email already exists.");
         setLoading(false);
         return;
       }
 
-      const newUser = { ...formData };
-      users.push(newUser);
-      localStorage.setItem('mock_users', JSON.stringify(users));
+      users.push(formData);
+      localStorage.setItem("mock_users", JSON.stringify(users));
 
-      setSuccess("Registration successful! Redirecting to login...");
-      setTimeout(() => navigate('/login'), 1200);
-
+      setSuccess("Registration successful! Redirecting...");
+      setTimeout(() => navigate("/login"), 1200);
     } catch {
-      setError("Something went wrong. Try again.");
+      setError("Something went wrong.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 via-white to-blue-50 px-4">
-      <div className="relative w-full max-w-md p-8 bg-white rounded-3xl shadow-xl border border-gray-100">
-        <h2 className="text-3xl font-bold text-center text-gray-900 mb-2">Create Your Account</h2>
-        <p className="text-center text-gray-500 mb-6 text-sm">Sign up to join the Valuation Dashboard</p>
+    <div className="min-h-screen grid place-items-center bg-white">
+      <div
+        className="w-full max-w-md rounded-2xl shadow-card p-6"
+        style={{ border: `1px solid ${primary[200]}`, background: "#fff" }}
+      >
+        {/* ICON */}
+        <div className="grid place-items-center">
+          <div
+            className="h-12 w-12 rounded-full grid place-items-center"
+            style={{ background: primary[50], color: primary[600] }}
+          >
+            <ShieldCheckIcon className="h-6 w-6" />
+          </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <InputField label="Full Name" name="name" value={formData.name} onChange={handleChange} />
-          <InputField label="Email" name="email" type="email" value={formData.email} onChange={handleChange} />
-          <PasswordField name="password" value={formData.password} onChange={handleChange} label="Password" />
-          <PasswordField name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} label="Confirm Password" />
+          <div className="mt-4 text-3xl font-semibold text-gray-900 text-center">
+            Create your account
+          </div>
 
-          {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-          {success && <p className="text-green-500 text-sm text-center">{success}</p>}
+          <div className="mt-1 text-sm text-gray-600 text-center">
+            Sign up to join the Valuation Dashboard
+          </div>
+        </div>
 
+        {/* Errors */}
+        {error && (
+          <div
+            className="mt-3 rounded-lg p-3 text-sm"
+            style={{
+              background: "#fee2e2",
+              color: "#b91c1c",
+              border: "1px solid #fecaca",
+            }}
+          >
+            {error}
+          </div>
+        )}
+        {success && (
+          <div
+            className="mt-3 rounded-lg p-3 text-sm"
+            style={{
+              background: primary[50],
+              color: primary[700],
+              border: `1px solid ${primary[200]}`,
+            }}
+          >
+            {success}
+          </div>
+        )}
+
+        {/* FORM */}
+        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+          {/* Full Name */}
+          <label className="block">
+            <div className="text-sm text-gray-900">Full Name</div>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              placeholder="John Doe"
+              className="mt-1 w-full h-11 rounded-xl px-3 focus:outline-none"
+              style={{ border: `1px solid ${primary[200]}` }}
+            />
+          </label>
+
+          {/* Email */}
+          <label className="block">
+            <div className="text-sm text-gray-900">Email</div>
+            <div className="mt-1 relative">
+              <input
+                type="email"
+                name="email"
+                placeholder="you@example.com"
+                value={formData.email}
+                onChange={handleChange}
+                className="w-full h-11 rounded-xl px-3 pr-10 focus:outline-none"
+                style={{ border: `1px solid ${primary[200]}` }}
+              />
+              <div
+                className="absolute right-3 top-1/2 -translate-y-1/2"
+                style={{ color: primary[500] }}
+              >
+                <EnvelopeIcon className="h-5 w-5" />
+              </div>
+            </div>
+          </label>
+
+          {/* Password */}
+          <label className="block">
+            <div className="text-sm text-gray-900">Password</div>
+            <input
+              type="password"
+              name="password"
+              placeholder="Enter your password"
+              value={formData.password}
+              onChange={handleChange}
+              className="mt-1 w-full h-11 rounded-xl px-3 focus:outline-none"
+              style={{ border: `1px solid ${primary[200]}` }}
+            />
+          </label>
+
+          {/* Confirm Password */}
+          <label className="block">
+            <div className="text-sm text-gray-900">Confirm Password</div>
+            <input
+              type="password"
+              name="confirmPassword"
+              placeholder="Re-enter your password"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              className="mt-1 w-full h-11 rounded-xl px-3 focus:outline-none"
+              style={{ border: `1px solid ${primary[200]}` }}
+            />
+          </label>
+
+          {/* BUTTON */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 mt-2 bg-linear-to-r from-blue-600 to-blue-600 hover:from-blue-600 hover:to-blue-600 text-white font-semibold rounded-xl shadow-md transition-all disabled:opacity-70 disabled:cursor-not-allowed"
+            className="h-11 w-full rounded-xl text-white shadow transition"
+            style={{
+              background: primary[600],
+              color: "#fff",
+              border: "none",
+            }}
           >
-            {loading ? 'Creating Account...' : 'Sign Up'}
+            {loading ? "Creating Account..." : "Sign Up"}
           </button>
         </form>
 
-        <p className="mt-6 text-center text-gray-500 text-sm">
-          Already have an account?{' '}
-          <Link to="/login" className="text-blue-600 font-medium hover:underline">Sign In</Link>
-        </p>
+        {/* Bottom Link */}
+        <div className="mt-6 text-center text-sm">
+          <span className="text-gray-700">Already have an account? </span>
+          <Link
+            to="/login"
+            style={{ color: primary[600] }}
+            className="font-medium hover:underline"
+          >
+            Sign In
+          </Link>
+        </div>
       </div>
     </div>
   );
 };
 
 export default SignupPage;
-
-// ====================
-// Reusable InputField
-function InputField({ label, name, type = 'text', value, onChange }) {
-  return (
-    <div>
-      <label className="block text-gray-700 font-medium mb-1">{label}</label>
-      <input
-        type={type}
-        name={name}
-        value={value}
-        onChange={onChange}
-        className="w-full px-4 py-3 border rounded-xl shadow-sm border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all"
-        required
-      />
-    </div>
-  );
-}
-
-// ====================
-// Reusable PasswordField
-function PasswordField({ name, value, onChange, label }) {
-  const [show, setShow] = useState(false);
-
-  return (
-    <div className="mb-4">
-      <label className="block text-gray-700 font-medium mb-1">{label}</label>
-      <div className="relative flex items-center">
-        <input
-          type={show ? 'text' : 'password'}
-          name={name}
-          value={value}
-          onChange={onChange}
-          className="w-full px-4 py-3 pr-16 border rounded-xl shadow-sm border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all"
-          required
-        />
-        <button
-          type="button"
-          onClick={() => setShow(!show)}
-          className="absolute right-3 text-gray-500 hover:text-gray-700 font-medium"
-        >
-          {show ? 'Hide' : 'Show'}
-        </button>
-      </div>
-    </div>
-  );
-}
-

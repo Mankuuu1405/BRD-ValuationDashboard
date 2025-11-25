@@ -4,6 +4,9 @@ import ScheduleVerificationModal from "../../components/ScheduleVerificationModa
 import AssignAgentModal from "../../components/AssignAgentModal";
 import StartVisitModal from "../../components/StartVisitModal";
 import ViewReportModal from "../../components/ViewReportModal";
+import { FieldVerificationMetrics } from "../../components/DashboardComponents";
+import { UsersIcon, ClipboardDocumentCheckIcon, ClockIcon, ArrowTrendingUpIcon } from "@heroicons/react/24/outline";
+
 
 const FieldVerifications = () => {
   const navigate = useNavigate();
@@ -43,6 +46,45 @@ const FieldVerifications = () => {
     setSelectedVerificationId(verificationId);
     setIsViewReportModalOpen(true);
   };
+
+
+// Define items with all content
+const statsItems = [
+  {
+    icon: ClipboardDocumentCheckIcon,
+    title: "Today's Visits",
+    mainValue: 12,
+    subText: "8 completed, 4 pending",
+    trendValue: 8,
+    trendType: "up",
+  },
+  {
+    icon: ClockIcon,
+    title: "Pending Verifications",
+    mainValue: 28,
+    subText: "Average TAT: 2.3 days",
+    trendValue: 5,
+    trendType: "down",
+  },
+  {
+    icon: UsersIcon,
+    title: "Active Agents",
+    mainValue: 8,
+    subText: "2 currently on field",
+    trendValue: 10,
+    trendType: "up",
+  },
+  {
+    icon: ArrowTrendingUpIcon,
+    title: "Success Rate",
+    mainValue: "95%",
+    subText: "↑ 3% this month",
+    trendValue: 3,
+    trendType: "up",
+  },
+];
+
+
 
   const verifications = [
     {
@@ -124,30 +166,8 @@ const FieldVerifications = () => {
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-white p-4 rounded-lg shadow-md">
-          <h3 className="text-sm font-medium text-gray-500">Today's Visits</h3>
-          <p className="text-2xl font-bold text-gray-900 mt-2">12</p>
-          <p className="text-xs text-gray-600 mt-1">8 completed, 4 pending</p>
-        </div>
-        <div className="bg-white p-4 rounded-lg shadow-md">
-          <h3 className="text-sm font-medium text-gray-500">
-            Pending Verifications
-          </h3>
-          <p className="text-2xl font-bold text-yellow-600 mt-2">28</p>
-          <p className="text-xs text-gray-600 mt-1">Average TAT: 2.3 days</p>
-        </div>
-        <div className="bg-white p-4 rounded-lg shadow-md">
-          <h3 className="text-sm font-medium text-gray-500">Active Agents</h3>
-          <p className="text-2xl font-bold text-blue-600 mt-2">8</p>
-          <p className="text-xs text-blue-600 mt-1">2 currently on field</p>
-        </div>
-        <div className="bg-white p-4 rounded-lg shadow-md">
-          <h3 className="text-sm font-medium text-gray-500">Success Rate</h3>
-          <p className="text-2xl font-bold text-green-600 mt-2">95%</p>
-          <p className="text-xs text-green-600 mt-1">↑ 3% this month</p>
-        </div>
-      </div>
+      <FieldVerificationMetrics items={statsItems} />
+
 
       {/* Filters and Search */}
       <div className="bg-white p-6 rounded-lg shadow-md">

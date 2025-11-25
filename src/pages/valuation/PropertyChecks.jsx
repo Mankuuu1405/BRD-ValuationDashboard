@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import NewPropertyCheckModal from "../../components/NewPropertyCheckModal";
 import ViewPropertyDetailsModal from "../../components/ViewPropertyDetailsModal";
+import { UsersIcon, ClipboardDocumentCheckIcon, CheckCircleIcon, BuildingLibraryIcon, ClockIcon } from "@heroicons/react/24/outline";
+import { FieldVerificationMetrics } from "../../components/DashboardComponents";
 
 const PropertyChecks = () => {
   const [activeProperty, setActiveProperty] = useState(null);
@@ -10,6 +12,41 @@ const PropertyChecks = () => {
     useState(false);
   const [isViewDetailsModalOpen, setIsViewDetailsModalOpen] = useState(false);
   const [selectedProperty, setSelectedProperty] = useState(null);
+
+  const propertyStats = [
+  {
+    title: "Total Properties",
+    mainValue: 148,
+    subText: "↑ 12 this month",
+    trendValue: 12,
+    trendType: "up",
+    icon: BuildingLibraryIcon,
+  },
+  {
+    title: "Pending Checks",
+    mainValue: 32,
+    subText: "Requires attention",
+    trendValue: 5,
+    trendType: "down",
+    icon: ClipboardDocumentCheckIcon,
+  },
+  {
+    title: "In Progress",
+    mainValue: 45,
+    subText: "On schedule",
+    trendValue: 12,
+    trendType: "up",
+    icon: ClockIcon,
+  },
+  {
+    title: "Completed",
+    mainValue: 71,
+    subText: "This month",
+    trendValue: 25,
+    trendType: "up",
+    icon: CheckCircleIcon,
+  },
+];
 
   const [properties, setProperties] = useState([
     {
@@ -121,30 +158,8 @@ const PropertyChecks = () => {
       </div>
 
       {/* Statistics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-white p-4 rounded-lg shadow-md">
-          <h3 className="text-sm font-medium text-gray-500">
-            Total Properties
-          </h3>
-          <p className="text-2xl font-bold text-gray-900 mt-2">148</p>
-          <p className="text-xs text-gray-600 mt-1">↑ 12 this month</p>
-        </div>
-        <div className="bg-white p-4 rounded-lg shadow-md">
-          <h3 className="text-sm font-medium text-gray-500">Pending Checks</h3>
-          <p className="text-2xl font-bold text-yellow-600 mt-2">32</p>
-          <p className="text-xs text-yellow-600 mt-1">Requires attention</p>
-        </div>
-        <div className="bg-white p-4 rounded-lg shadow-md">
-          <h3 className="text-sm font-medium text-gray-500">In Progress</h3>
-          <p className="text-2xl font-bold text-blue-600 mt-2">45</p>
-          <p className="text-xs text-blue-600 mt-1">On schedule</p>
-        </div>
-        <div className="bg-white p-4 rounded-lg shadow-md">
-          <h3 className="text-sm font-medium text-gray-500">Completed</h3>
-          <p className="text-2xl font-bold text-green-600 mt-2">71</p>
-          <p className="text-xs text-green-600 mt-1">This month</p>
-        </div>
-      </div>
+      <FieldVerificationMetrics items={propertyStats} />
+
 
       {/* Filters */}
       <div className="bg-white p-6 rounded-lg shadow-md">

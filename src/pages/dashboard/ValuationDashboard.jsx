@@ -1,9 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { DashboardMetrics } from "../../components/DashboardComponents";
-import { LineChart, BarChart, DoughnutChart } from "../../components/Charts";
+import { LineChart, BarChart, PieChart } from "../../components/Charts";
 import NewValuationModal from "../../components/NewValuationModal";
 import GenerateReportModal from "../../components/GenerateReportModal";
+import {
+  ClockIcon,
+  CheckCircleIcon,
+  BanknotesIcon,
+  ArrowTrendingUpIcon,
+} from "@heroicons/react/24/outline";
 
 const ValuationDashboard = () => {
   const [isNewValuationModalOpen, setNewValuationModalOpen] =
@@ -12,10 +18,34 @@ const ValuationDashboard = () => {
     React.useState(false);
 
   const metrics = [
-    { title: "Pending Valuations", value: "42", trend: -8, color: "yellow" },
-    { title: "Completed Today", value: "15", trend: 25, color: "green" },
-    { title: "Average Value", value: "₹45.2L", trend: 12, color: "blue" },
-    { title: "Success Rate", value: "94%", trend: 2.5, color: "green" },
+    {
+      title: "Pending Valuations",
+      value: "42",
+      trend: -8,
+      color: "yellow",
+      icon: ClockIcon,
+    },
+    {
+      title: "Completed Today",
+      value: "15",
+      trend: 25,
+      color: "green",
+      icon: CheckCircleIcon,
+    },
+    {
+      title: "Average Value",
+      value: "₹45.2L",
+      trend: 12,
+      color: "blue",
+      icon: BanknotesIcon,
+    },
+    {
+      title: "Success Rate",
+      value: "94%",
+      trend: 2.5,
+      color: "green",
+      icon: ArrowTrendingUpIcon,
+    },
   ];
 
   const recentValuations = [
@@ -117,7 +147,7 @@ const ValuationDashboard = () => {
           <h3 className="text-lg font-semibold mb-4">
             Property Type Distribution
           </h3>
-          <DoughnutChart
+          <PieChart
             data={{
               labels: [
                 "Residential",
