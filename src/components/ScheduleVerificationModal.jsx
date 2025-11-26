@@ -37,7 +37,6 @@ const ScheduleVerificationModal = ({ isOpen, onClose, verificationId }) => {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-5">
-
           {/* Property ID */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -109,7 +108,6 @@ const ScheduleVerificationModal = ({ isOpen, onClose, verificationId }) => {
               Schedule
             </button>
           </div>
-
         </form>
       </div>
     </div>

@@ -1,5 +1,9 @@
 import React from "react";
-import { UsersIcon, ClipboardDocumentCheckIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
+import {
+  UsersIcon,
+  ClipboardDocumentCheckIcon,
+  CheckCircleIcon,
+} from "@heroicons/react/24/outline";
 
 const primary = {
   50: "#eff6ff",
@@ -14,7 +18,11 @@ export const StatCard = ({ icon: Icon, title, value, trend }) => {
           {Icon && <Icon className="h-5 w-5" style={{ color: primary[600] }} />}
         </div>
         {trend != null && (
-          <div className={`text-sm font-semibold ${trend >= 0 ? "text-green-600" : "text-red-600"}`}>
+          <div
+            className={`text-sm font-semibold ${
+              trend >= 0 ? "text-green-600" : "text-red-600"
+            }`}
+          >
             {trend > 0 ? "↑" : "↓"} {Math.abs(trend)}%
           </div>
         )}
@@ -25,22 +33,32 @@ export const StatCard = ({ icon: Icon, title, value, trend }) => {
   );
 };
 
-
-
-
-export const FieldVerificationStatCard = ({ title, mainValue, subText, trendValue, trendType, icon: Icon }) => {
+export const FieldVerificationStatCard = ({
+  title,
+  mainValue,
+  subText,
+  trendValue,
+  trendType,
+  icon: Icon,
+}) => {
   const trendColor =
-    trendType === "up" ? "text-green-600" : trendType === "down" ? "text-red-600" : "";
+    trendType === "up"
+      ? "text-green-600"
+      : trendType === "down"
+      ? "text-red-600"
+      : "";
 
   return (
     <div className="bg-white rounded-lg shadow-md p-4 border border-gray-100 cursor-pointer">
       <div className="flex items-center justify-between">
         <div className="h-9 w-9 rounded-lg bg-blue-50 text-blue-700 grid place-items-center">
-          {Icon && <Icon className="h-5 w-5 text-blue-600" />} {/* ✅ use capitalized Icon */}
+          {Icon && <Icon className="h-5 w-5 text-blue-600" />}{" "}
+          {/* ✅ use capitalized Icon */}
         </div>
         {trendValue != null && (
           <div className={`text-sm font-semibold ${trendColor}`}>
-            {trendType === "up" ? "↑" : trendType === "down" ? "↓" : ""} {Math.abs(trendValue)}%
+            {trendType === "up" ? "↑" : trendType === "down" ? "↓" : ""}{" "}
+            {Math.abs(trendValue)}%
           </div>
         )}
       </div>
@@ -51,9 +69,12 @@ export const FieldVerificationStatCard = ({ title, mainValue, subText, trendValu
   );
 };
 
-
-
-export const SimpleTable = ({ headers, data, onRowSelect = () => {}, selectedRows = [] }) => (
+export const SimpleTable = ({
+  headers,
+  data,
+  onRowSelect = () => {},
+  selectedRows = [],
+}) => (
   <div className="bg-white shadow-md rounded-lg overflow-hidden">
     <table className="min-w-full divide-y divide-gray-200">
       <thead className="bg-gray-50">
@@ -77,7 +98,10 @@ export const SimpleTable = ({ headers, data, onRowSelect = () => {}, selectedRow
             </th>
           )}
           {headers.map((header, idx) => (
-            <th key={idx} className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th
+              key={idx}
+              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
               {header}
             </th>
           ))}
@@ -97,7 +121,10 @@ export const SimpleTable = ({ headers, data, onRowSelect = () => {}, selectedRow
               </td>
             )}
             {headers.map((header, cellIdx) => (
-              <td key={cellIdx} className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              <td
+                key={cellIdx}
+                className="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
+              >
                 {row[header]}
               </td>
             ))}
@@ -125,4 +152,3 @@ export const FieldVerificationMetrics = ({ items }) => {
     </div>
   );
 };
-

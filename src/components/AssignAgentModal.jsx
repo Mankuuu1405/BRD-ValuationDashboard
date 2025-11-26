@@ -35,7 +35,6 @@ const AssignAgentModal = ({ isOpen, onClose, verificationId }) => {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-5">
-
           {/* Verification ID */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -89,7 +88,6 @@ const AssignAgentModal = ({ isOpen, onClose, verificationId }) => {
               Assign
             </button>
           </div>
-
         </form>
       </div>
     </div>

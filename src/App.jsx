@@ -1,6 +1,11 @@
-import React from 'react';
-import { createBrowserRouter, RouterProvider, Navigate, Outlet } from 'react-router-dom';
-import { useAuth } from './context/AuthContext.jsx';
+import React from "react";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Navigate,
+  Outlet,
+} from "react-router-dom";
+import { useAuth } from "./context/AuthContext.jsx";
 
 // --- Page Imports ---
 // Auth
@@ -20,9 +25,8 @@ import FieldVerifications from "./pages/valuation/FieldVerifications.jsx";
 import PropertyChecks from "./pages/valuation/PropertyChecks.jsx";
 import ValuationDetails from "./pages/valuation/ValuationDetails.jsx";
 
-
 // Layout
-import DepartmentLayout from './components/DepartmentLayout.jsx';
+import DepartmentLayout from "./components/DepartmentLayout.jsx";
 
 // ProtectedRoute Component
 const ProtectedRoute = ({ allowedRoles }) => {
@@ -44,45 +48,52 @@ const ProtectedRoute = ({ allowedRoles }) => {
 // --- Router Configuration ---
 const router = createBrowserRouter([
   // Public routes
-  { path: '/', element: <Navigate to="/login" replace /> },
-  { path: '/login', element: <LoginPage /> },
-  { path: '/signup', element: <SignupPage /> },
-  { path: '/all-users', element: <AllUsersPage /> },
+  { path: "/", element: <Navigate to="/login" replace /> },
+  { path: "/login", element: <LoginPage /> },
+  { path: "/signup", element: <SignupPage /> },
+  { path: "/all-users", element: <AllUsersPage /> },
 
-  
-
-  
   // Valuation routes
   {
     element: <ProtectedRoute allowedRoles={["valuation"]} />,
     children: [
       {
-        path: '/valuation',
+        path: "/valuation",
         element: <DepartmentLayout />,
         children: [
           { index: true, element: <ValuationDashboard /> },
-          { path: 'field-verifications', element: <FieldVerifications /> },
-          { path: 'property-checks', element: <PropertyChecks /> },
-          { path: ':id', element: <ValuationDetails /> },
+          { path: "field-verifications", element: <FieldVerifications /> },
+          { path: "property-checks", element: <PropertyChecks /> },
+          { path: ":id", element: <ValuationDetails /> },
         ],
       },
     ],
   },
 
-
   // Profile route
   {
-    element: <ProtectedRoute allowedRoles={["sales", "credit", "legal", "valuation", "finance", "compliance"]} />,
+    element: (
+      <ProtectedRoute
+        allowedRoles={[
+          "sales",
+          "credit",
+          "legal",
+          "valuation",
+          "finance",
+          "compliance",
+        ]}
+      />
+    ),
     children: [
       {
-        path: '/profile',
+        path: "/profile",
         element: <ProfilePage />,
       },
     ],
   },
 
   // Catch-all
-  { path: '*', element: <Navigate to="/login" replace /> },
+  { path: "*", element: <Navigate to="/login" replace /> },
 ]);
 
 function App() {

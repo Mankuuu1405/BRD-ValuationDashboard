@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import NewPropertyCheckModal from "../../components/NewPropertyCheckModal";
 import ViewPropertyDetailsModal from "../../components/ViewPropertyDetailsModal";
-import { UsersIcon, ClipboardDocumentCheckIcon, CheckCircleIcon, BuildingLibraryIcon, ClockIcon } from "@heroicons/react/24/outline";
+import {
+  UsersIcon,
+  ClipboardDocumentCheckIcon,
+  CheckCircleIcon,
+  BuildingLibraryIcon,
+  ClockIcon,
+} from "@heroicons/react/24/outline";
 import { FieldVerificationMetrics } from "../../components/DashboardComponents";
 
 const PropertyChecks = () => {
@@ -14,39 +20,39 @@ const PropertyChecks = () => {
   const [selectedProperty, setSelectedProperty] = useState(null);
 
   const propertyStats = [
-  {
-    title: "Total Properties",
-    mainValue: 148,
-    subText: "↑ 12 this month",
-    trendValue: 12,
-    trendType: "up",
-    icon: BuildingLibraryIcon,
-  },
-  {
-    title: "Pending Checks",
-    mainValue: 32,
-    subText: "Requires attention",
-    trendValue: 5,
-    trendType: "down",
-    icon: ClipboardDocumentCheckIcon,
-  },
-  {
-    title: "In Progress",
-    mainValue: 45,
-    subText: "On schedule",
-    trendValue: 12,
-    trendType: "up",
-    icon: ClockIcon,
-  },
-  {
-    title: "Completed",
-    mainValue: 71,
-    subText: "This month",
-    trendValue: 25,
-    trendType: "up",
-    icon: CheckCircleIcon,
-  },
-];
+    {
+      title: "Total Properties",
+      mainValue: 148,
+      subText: "↑ 12 this month",
+      trendValue: 12,
+      trendType: "up",
+      icon: BuildingLibraryIcon,
+    },
+    {
+      title: "Pending Checks",
+      mainValue: 32,
+      subText: "Requires attention",
+      trendValue: 5,
+      trendType: "down",
+      icon: ClipboardDocumentCheckIcon,
+    },
+    {
+      title: "In Progress",
+      mainValue: 45,
+      subText: "On schedule",
+      trendValue: 12,
+      trendType: "up",
+      icon: ClockIcon,
+    },
+    {
+      title: "Completed",
+      mainValue: 71,
+      subText: "This month",
+      trendValue: 25,
+      trendType: "up",
+      icon: CheckCircleIcon,
+    },
+  ];
 
   const [properties, setProperties] = useState([
     {
@@ -159,7 +165,6 @@ const PropertyChecks = () => {
 
       {/* Statistics Cards */}
       <FieldVerificationMetrics items={propertyStats} />
-
 
       {/* Filters */}
       <div className="bg-white p-6 rounded-lg shadow-md">

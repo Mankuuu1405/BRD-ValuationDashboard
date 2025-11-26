@@ -5,8 +5,12 @@ import AssignAgentModal from "../../components/AssignAgentModal";
 import StartVisitModal from "../../components/StartVisitModal";
 import ViewReportModal from "../../components/ViewReportModal";
 import { FieldVerificationMetrics } from "../../components/DashboardComponents";
-import { UsersIcon, ClipboardDocumentCheckIcon, ClockIcon, ArrowTrendingUpIcon } from "@heroicons/react/24/outline";
-
+import {
+  UsersIcon,
+  ClipboardDocumentCheckIcon,
+  ClockIcon,
+  ArrowTrendingUpIcon,
+} from "@heroicons/react/24/outline";
 
 const FieldVerifications = () => {
   const navigate = useNavigate();
@@ -18,7 +22,6 @@ const FieldVerifications = () => {
   const [isStartVisitModalOpen, setIsStartVisitModalOpen] = useState(false);
   const [isViewReportModalOpen, setIsViewReportModalOpen] = useState(false);
 
-  // Placeholder functions for button actions
   const handleScheduleVerification = () => {
     setIsScheduleModalOpen(true);
   };
@@ -47,44 +50,40 @@ const FieldVerifications = () => {
     setIsViewReportModalOpen(true);
   };
 
-
-// Define items with all content
-const statsItems = [
-  {
-    icon: ClipboardDocumentCheckIcon,
-    title: "Today's Visits",
-    mainValue: 12,
-    subText: "8 completed, 4 pending",
-    trendValue: 8,
-    trendType: "up",
-  },
-  {
-    icon: ClockIcon,
-    title: "Pending Verifications",
-    mainValue: 28,
-    subText: "Average TAT: 2.3 days",
-    trendValue: 5,
-    trendType: "down",
-  },
-  {
-    icon: UsersIcon,
-    title: "Active Agents",
-    mainValue: 8,
-    subText: "2 currently on field",
-    trendValue: 10,
-    trendType: "up",
-  },
-  {
-    icon: ArrowTrendingUpIcon,
-    title: "Success Rate",
-    mainValue: "95%",
-    subText: "↑ 3% this month",
-    trendValue: 3,
-    trendType: "up",
-  },
-];
-
-
+  const statsItems = [
+    {
+      icon: ClipboardDocumentCheckIcon,
+      title: "Today's Visits",
+      mainValue: 12,
+      subText: "8 completed, 4 pending",
+      trendValue: 8,
+      trendType: "up",
+    },
+    {
+      icon: ClockIcon,
+      title: "Pending Verifications",
+      mainValue: 28,
+      subText: "Average TAT: 2.3 days",
+      trendValue: 5,
+      trendType: "down",
+    },
+    {
+      icon: UsersIcon,
+      title: "Active Agents",
+      mainValue: 8,
+      subText: "2 currently on field",
+      trendValue: 10,
+      trendType: "up",
+    },
+    {
+      icon: ArrowTrendingUpIcon,
+      title: "Success Rate",
+      mainValue: "95%",
+      subText: "↑ 3% this month",
+      trendValue: 3,
+      trendType: "up",
+    },
+  ];
 
   const verifications = [
     {
@@ -167,7 +166,6 @@ const statsItems = [
 
       {/* Summary Cards */}
       <FieldVerificationMetrics items={statsItems} />
-
 
       {/* Filters and Search */}
       <div className="bg-white p-6 rounded-lg shadow-md">
