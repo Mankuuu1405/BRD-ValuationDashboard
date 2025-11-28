@@ -24,7 +24,7 @@ const Sidebar = ({ mobileSidebarOpen, setMobileSidebarOpen }) => {
   const location = useLocation();
 
   const items = [
-    { key: "dashboard", label: "Dashboard", icon: HomeIcon, to: "/valuation" },
+    { key: "dashboard", label: "Dashboard", icon: HomeIcon, to: "/valuation/dashboard" },
     {
       key: "field-verifications",
       label: "Field Verifications",

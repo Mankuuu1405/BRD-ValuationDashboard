@@ -45,7 +45,7 @@ export default function LoginPage() {
     }
 
     login({ email: found.email, role: found.role, name: found.name });
-    navigate(`/${found.role}`);
+    navigate(`/${found.role}/dashboard`);
   };
 
   return (

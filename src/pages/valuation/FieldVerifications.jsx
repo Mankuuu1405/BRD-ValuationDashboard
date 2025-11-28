@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+
 import ScheduleVerificationModal from "../../components/ScheduleVerificationModal";
 import AssignAgentModal from "../../components/AssignAgentModal";
 import StartVisitModal from "../../components/StartVisitModal";
 import ViewReportModal from "../../components/ViewReportModal";
+
 import { FieldVerificationMetrics } from "../../components/DashboardComponents";
 import {
   UsersIcon,
@@ -12,44 +14,52 @@ import {
   ArrowTrendingUpIcon,
 } from "@heroicons/react/24/outline";
 
+import { FieldVerificationAPI } from "../../utils/api";
+
 const FieldVerifications = () => {
   const navigate = useNavigate();
+
   const [filter, setFilter] = useState("pending");
   const [searchQuery, setSearchQuery] = useState("");
+
+  const [verifications, setVerifications] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
   const [isAssignModalOpen, setIsAssignModalOpen] = useState(false);
-  const [selectedVerificationId, setSelectedVerificationId] = useState(null);
   const [isStartVisitModalOpen, setIsStartVisitModalOpen] = useState(false);
   const [isViewReportModalOpen, setIsViewReportModalOpen] = useState(false);
 
-  const handleScheduleVerification = () => {
-    setIsScheduleModalOpen(true);
+  const [selectedVerificationId, setSelectedVerificationId] = useState(null);
+
+  // ------------------------------
+  // LOAD API DATA (with mock fallback)
+  // ------------------------------
+  const loadVerifications = () => {
+    setLoading(true);
+
+    FieldVerificationAPI.getVerificationsList({})
+      .then((data) => {
+        // Normalize data to always be an array
+        const list = Array.isArray(data)
+          ? data
+          : Array.isArray(data?.data)
+          ? data.data
+          : [];
+
+        setVerifications(list);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
   };
 
-  const handleAssignAgent = () => {
-    setIsAssignModalOpen(true);
-  };
+  useEffect(() => {
+    loadVerifications();
+  }, []);
 
-  const handleSchedule = (verificationId) => {
-    setSelectedVerificationId(verificationId);
-    setIsScheduleModalOpen(true);
-  };
-
-  const handleReassign = (verificationId) => {
-    setSelectedVerificationId(verificationId);
-    setIsAssignModalOpen(true);
-  };
-
-  const handleStartVisit = (verificationId) => {
-    setSelectedVerificationId(verificationId);
-    setIsStartVisitModalOpen(true);
-  };
-
-  const handleViewReport = (verificationId) => {
-    setSelectedVerificationId(verificationId);
-    setIsViewReportModalOpen(true);
-  };
-
+  // ------------------------------
+  // Metric Cards
+  // ------------------------------
   const statsItems = [
     {
       icon: ClipboardDocumentCheckIcon,
@@ -85,54 +95,54 @@ const FieldVerifications = () => {
     },
   ];
 
-  const verifications = [
-    {
-      id: "FV-2001",
-      property: "3 BHK Apartment",
-      address: "Palm Grove Heights, Malad West, Mumbai",
-      owner: "Rahul Mehta",
-      date: "2025-11-04",
-      status: "Pending",
-      agent: "Priya Singh",
-      priority: "High",
-      notes: "Owner available after 6 PM",
-    },
-    {
-      id: "FV-2002",
-      property: "Commercial Space",
-      address: "Tech Park, Whitefield, Bangalore",
-      owner: "TechCorp Ltd",
-      date: "2025-11-04",
-      status: "Scheduled",
-      agent: "Amit Kumar",
-      priority: "Medium",
-      notes: "Verify tenant occupancy",
-    },
-    {
-      id: "FV-2003",
-      property: "Industrial Unit",
-      address: "MIDC, Pune",
-      owner: "Manufacturing Solutions",
-      date: "2025-11-03",
-      status: "Completed",
-      agent: "Rajesh Sharma",
-      priority: "High",
-      notes: "Equipment verification needed",
-    },
-  ];
-
+  // ------------------------------
+  // FILTER + SEARCH
+  // ------------------------------
   const filtered = verifications.filter((v) => {
-    if (filter !== "all" && v.status.toLowerCase() !== filter.toLowerCase())
+    if (filter !== "all" && v.status?.toLowerCase() !== filter.toLowerCase())
       return false;
+
     if (
       searchQuery &&
-      !v.property.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      !v.id.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      !v.address.toLowerCase().includes(searchQuery.toLowerCase())
+      !v.property?.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      !v.id?.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      !v.address?.toLowerCase().includes(searchQuery.toLowerCase())
     )
       return false;
+
     return true;
   });
+
+  // ------------------------------
+  // Action Handlers
+  // ------------------------------
+  const handleSchedule = (id) => {
+    setSelectedVerificationId(id);
+    setIsScheduleModalOpen(true);
+  };
+
+  const handleReassign = (id) => {
+    setSelectedVerificationId(id);
+    setIsAssignModalOpen(true);
+  };
+
+  const handleStartVisit = (id) => {
+    setSelectedVerificationId(id);
+    setIsStartVisitModalOpen(true);
+  };
+
+  const handleViewReport = (id) => {
+    setSelectedVerificationId(id);
+    setIsViewReportModalOpen(true);
+  };
+
+  if (loading) {
+    return (
+      <div className="p-6 text-center text-gray-600 text-lg">
+        Loading field verifications...
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 space-y-6">
@@ -150,13 +160,13 @@ const FieldVerifications = () => {
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center md:justify-end">
           <button
-            onClick={handleScheduleVerification}
+            onClick={() => setIsScheduleModalOpen(true)}
             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
           >
             Schedule Verification
           </button>
           <button
-            onClick={handleAssignAgent}
+            onClick={() => setIsAssignModalOpen(true)}
             className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition"
           >
             Assign Agent
@@ -190,7 +200,7 @@ const FieldVerifications = () => {
           <div className="flex-1 w-full">
             <input
               type="search"
-              placeholder="Search by property, ID or address..."
+              placeholder="Search property or ID"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
@@ -425,6 +435,7 @@ const FieldVerifications = () => {
         </ul>
       </div>
 
+      {/* MODALS */}
       <ScheduleVerificationModal
         isOpen={isScheduleModalOpen}
         onClose={() => setIsScheduleModalOpen(false)}
@@ -448,6 +459,7 @@ const FieldVerifications = () => {
         onClose={() => setIsViewReportModalOpen(false)}
         verificationId={selectedVerificationId}
       />
+
     </div>
   );
 };
