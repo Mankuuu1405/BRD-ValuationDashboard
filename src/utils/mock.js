@@ -31,11 +31,11 @@ export const MockAPI = {
         { type: "Agricultural", count: 20, color: "#A05FCA" },
       ],
       monthlyComplition: [
-        { month: "Jun", count: 85 },
+        { month: "Jun", count: 70 },
         { month: "Jul", count: 92 },
         { month: "Aug", count: 88 },
         { month: "Sep", count: 95 },
-        { month: "Oct", count: 91 },
+        { month: "Oct", count: 85 },
         { month: "Nov", count: 94 },
       ],
       locationDistribution: [
@@ -49,7 +49,7 @@ export const MockAPI = {
     });
   },
 
-  // ---------------------------------------------
+  // ----------------------------------------------
   // 2. Field Verifications Mock
   // ---------------------------------------------
    getVerificationsList: () => {

@@ -21,7 +21,6 @@ const ValuationDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [dashboardData, setDashboardData] = useState(null);
 
-
   const [filterMonth, setFilterMonth] = useState("All");
   const [filterProperty, setFilterProperty] = useState("All");
   const [filterState, setFilterState] = useState("All");
@@ -54,38 +53,72 @@ const ValuationDashboard = () => {
     );
   }
 
-
   // Add this above your component return, after fetching dashboardData
-const locationGeoData = [
-  { month: "January", place: "Mumbai", count: 200, topProperty: "Residential", avgLoan: 5000000 },
-  { month: "January", place: "Bangalore", count: 150, topProperty: "Commercial", avgLoan: 3500000 },
-  { month: "February", place: "Delhi", count: 120, topProperty: "Residential", avgLoan: 4000000 },
-  { month: "March", place: "Hyderabad", count: 100, topProperty: "Industrial", avgLoan: 3000000 },
-  { month: "March", place: "Chennai", count: 80, topProperty: "Residential", avgLoan: 2500000 },
-];
+  const locationGeoData = [
+    {
+      month: "January",
+      place: "Mumbai",
+      count: 200,
+      topProperty: "Residential",
+      avgLoan: 5000000,
+    },
+    {
+      month: "January",
+      place: "Bangalore",
+      count: 150,
+      topProperty: "Commercial",
+      avgLoan: 3500000,
+    },
+    {
+      month: "February",
+      place: "Delhi",
+      count: 120,
+      topProperty: "Residential",
+      avgLoan: 4000000,
+    },
+    {
+      month: "March",
+      place: "Hyderabad",
+      count: 100,
+      topProperty: "Industrial",
+      avgLoan: 3000000,
+    },
+    {
+      month: "March",
+      place: "Chennai",
+      count: 80,
+      topProperty: "Residential",
+      avgLoan: 2500000,
+    },
+  ];
 
-
-// ------------------------
+  // ------------------------
   // Filtered Data
   // ------------------------
   const filteredData = locationGeoData.filter((loc) => {
-  const monthMatch = filterMonth === "All" || loc.month === filterMonth;
-  const propertyMatch = filterProperty === "All" || loc.topProperty === filterProperty;
-  const stateMatch = filterState === "All" || loc.place === filterState;
+    const monthMatch = filterMonth === "All" || loc.month === filterMonth;
+    const propertyMatch =
+      filterProperty === "All" || loc.topProperty === filterProperty;
+    const stateMatch = filterState === "All" || loc.place === filterState;
 
-  return monthMatch && propertyMatch && stateMatch;
-});
-
+    return monthMatch && propertyMatch && stateMatch;
+  });
 
   // ------------------------
   // Extract options for filters
   // ------------------------
-const monthOptions = ["All", ...new Set(locationGeoData.map((loc) => loc.month))];
-const propertyOptions = ["All", ...new Set(locationGeoData.map((loc) => loc.topProperty))];
-const stateOptions = ["All", ...new Set(locationGeoData.map((loc) => loc.place))];
-
-
-
+  const monthOptions = [
+    "All",
+    ...new Set(locationGeoData.map((loc) => loc.month)),
+  ];
+  const propertyOptions = [
+    "All",
+    ...new Set(locationGeoData.map((loc) => loc.topProperty)),
+  ];
+  const stateOptions = [
+    "All",
+    ...new Set(locationGeoData.map((loc) => loc.place)),
+  ];
 
   // ---------------------------------------
   // Prepare Metrics
@@ -149,7 +182,6 @@ const stateOptions = ["All", ...new Set(locationGeoData.map((loc) => loc.place))
   const locationDistributionCount = dashboardData.locationDistribution.map(
     (m) => m.count
   );
-
 
   // Static placeholder data for latest 4 valuations
   // (Replace with API call later if required)
@@ -234,128 +266,183 @@ const stateOptions = ["All", ...new Set(locationGeoData.map((loc) => loc.place))
       />
 
       {/* CHARTS */}
-<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-  {/* VALUATION TRENDS */}
-  <div className="bg-white p-6 rounded-lg shadow-md">
-    <h3 className="text-lg font-semibold mb-4">Valuation Trends</h3>
-    <LineChart
-      data={{
-        labels: trendLabels,
-        datasets: [
-          {
-            label: "Avg Property Value (Lakhs ₹)",
-            data: trendValues,
-            borderColor: "rgb(59, 130, 246)",
-            backgroundColor: "rgba(59, 130, 246, 0.15)",
-            tension: 0.3,
-          },
-        ],
-      }}
-    />
-  </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* VALUATION TRENDS */}
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <h3 className="text-lg font-semibold mb-4">Valuation Trends</h3>
+          <LineChart
+            data={{
+              labels: trendLabels,
+              datasets: [
+                {
+                  label: "Avg Property Value (Lakhs ₹)",
+                  data: trendValues,
+                  borderColor: "rgb(59, 130, 246)",
+                  backgroundColor: "rgba(59, 130, 246, 0.15)",
+                  tension: 0.3,
+                },
+              ],
+            }}
+          />
+        </div>
 
-  {/* PROPERTY DISTRIBUTION */}
-  <div className="bg-white p-6 rounded-lg shadow-md">
-    <h3 className="text-lg font-semibold mb-4">Property Type Distribution</h3>
-    <PieChart
-      data={{
-        labels: distributionLabels,
-        datasets: [
-          {
-            data: distributionValues,
-            backgroundColor: distributionColors,
-          },
-        ],
-      }}
-    />
-  </div>
+        {/* PROPERTY DISTRIBUTION */}
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <h3 className="text-lg font-semibold mb-4">
+            Property Type Distribution
+          </h3>
+          <PieChart
+            data={{
+              labels: distributionLabels,
+              datasets: [
+                {
+                  data: distributionValues,
+                  backgroundColor: distributionColors,
+                },
+              ],
+            }}
+          />
+        </div>
 
-  {/* MONTHLY COMPLETION RATE */}
-  <div className="bg-white p-6 rounded-lg shadow-md lg:col-span-2">
-    <h3 className="text-lg font-semibold mb-4">Monthly Completion Rate</h3>
-    <BarChart
-      data={{
-        labels: monthlyComplitonLables,
-        datasets: [
-          {
-            label: "Completed",
-            data: monthlyComplitonCount,
-            backgroundColor: "rgba(16, 185, 129, 0.8)",
-          },
-        ],
-      }}
-    />
-  </div>
+        {/* MONTHLY COMPLETION RATE */}
+        <div className="bg-white p-6 rounded-lg shadow-md lg:col-span-2">
+          <h3 className="text-lg font-semibold mb-4">
+            Monthly Completion Rate
+          </h3>
+          <BarChart
+            data={{
+              labels: monthlyComplitonLables,
+              datasets: [
+                {
+                  label: "Completed",
+                  data: monthlyComplitonCount,
+                  backgroundColor: "rgba(16, 185, 129, 0.8)",
+                  maxBarThickness: 70, // controls max width
+                },
+              ],
+            }}
+          />
+        </div>
 
-   {/* LOCATION DISTRIBUTION FILTER */}
-      <div className="bg-white p-4 rounded-lg shadow-md lg:col-span-2">
-        <h3 className="text-lg font-semibold mb-2">Filter Location Distribution</h3>
-        <div className="flex flex-wrap gap-4">
-          <select
-            value={filterMonth}
-            onChange={(e) => setFilterMonth(e.target.value)}
-            className="border px-3 py-2 rounded-md"
-          >
-            {monthOptions.map((month) => (
-              <option key={month} value={month}>{month}</option>
-            ))}
-          </select>
+        {/* LOCATION DISTRIBUTION SECTION */}
+        <div className="bg-white p-6 rounded-lg shadow-md lg:col-span-2">
+          {/* Filters Row */}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:gap-6 gap-4 mb-6">
+            {/* Month Filter */}
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 w-full sm:w-auto">
+              <label className="text-sm font-medium text-gray-600 min-w-[60px]">
+                Month:
+              </label>
+              <select
+                value={filterMonth}
+                onChange={(e) => setFilterMonth(e.target.value)}
+                className="w-full sm:w-40 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+              >
+                {monthOptions.map((month) => (
+                  <option key={month} value={month}>
+                    {month}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          <select
-            value={filterProperty}
-            onChange={(e) => setFilterProperty(e.target.value)}
-            className="border px-3 py-2 rounded-md"
-          >
-            {propertyOptions.map((prop) => (
-              <option key={prop} value={prop}>{prop}</option>
-            ))}
-          </select>
+            {/* Property Filter */}
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 w-full sm:w-auto">
+              <label className="text-sm font-medium text-gray-600 min-w-[60px]">
+                Type:
+              </label>
+              <select
+                value={filterProperty}
+                onChange={(e) => setFilterProperty(e.target.value)}
+                className="w-full sm:w-40 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+              >
+                {propertyOptions.map((prop) => (
+                  <option key={prop} value={prop}>
+                    {prop}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          <select
-            value={filterState}
-            onChange={(e) => setFilterState(e.target.value)}
-            className="border px-3 py-2 rounded-md"
-          >
-            {stateOptions.map((state) => (
-              <option key={state} value={state}>{state}</option>
-            ))}
-          </select>
+            {/* State Filter */}
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 w-full sm:w-auto">
+              <label className="text-sm font-medium text-gray-600 min-w-[60px]">
+                State:
+              </label>
+              <select
+                value={filterState}
+                onChange={(e) => setFilterState(e.target.value)}
+                className="w-full sm:w-40 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+              >
+                {stateOptions.map((state) => (
+                  <option key={state} value={state}>
+                    {state}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Table Section */}
+          <div className="bg-white rounded-lg shadow-md overflow-hidden">
+            <div className="px-4 sm:px-6 py-4 border-b border-gray-200">
+              <h3 className="text-lg font-semibold">Location Distribution</h3>
+            </div>
+
+            {/* Scrollable table for larger screens */}
+            <div className="overflow-x-auto sm:block hidden">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    {[
+                      "State/City",
+                      "Valuations Count",
+                      "Top Property Type",
+                      "Avg Loan",
+                    ].map((heading) => (
+                      <th
+                        key={heading}
+                        className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        {heading}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {filteredData.map((loc, idx) => (
+                    <tr key={idx} className="hover:bg-gray-50">
+                      <td className="px-4 sm:px-6 py-4 text-sm font-semibold text-gray-900">
+                        {loc.place}
+                      </td>
+                      <td className="px-4 sm:px-6 py-4 text-sm text-gray-500">
+                        {loc.count}
+                      </td>
+                      <td className="px-4 sm:px-6 py-4 text-sm font-semibold text-gray-900">
+                        {loc.topProperty}
+                      </td>
+                      <td className="px-4 sm:px-6 py-4 text-sm  text-gray-900">
+                        ₹{loc.avgLoan.toLocaleString()}
+                      </td>
+                    </tr>
+                  ))}
+
+                  {filteredData.length === 0 && (
+                    <tr>
+                      <td
+                        colSpan={4}
+                        className="px-6 py-4 text-center text-sm text-gray-500"
+                      >
+                        No records match your filters.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
-
-      {/* LOCATION DISTRIBUTION TABLE */}
-      <div className="bg-white rounded-lg shadow-md lg:col-span-2 overflow-x-auto">
-        <div className="px-4 sm:px-6 py-4 border-b border-gray-200">
-          <h3 className="text-lg font-semibold">Location Distribution</h3>
-        </div>
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              {["State/City", "Valuations Count", "Top Property Type", "Avg Loan"].map((heading) => (
-                <th
-                  key={heading}
-                  className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  {heading}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {filteredData.map((loc, idx) => (
-              <tr key={idx} className="hover:bg-gray-50">
-                <td className="px-4 sm:px-6 py-4 text-sm text-gray-900">{loc.place}</td>
-                <td className="px-4 sm:px-6 py-4 text-sm text-gray-500">{loc.count}</td>
-                <td className="px-4 sm:px-6 py-4 text-sm text-gray-900">{loc.topProperty}</td>
-                <td className="px-4 sm:px-6 py-4 text-sm text-gray-900">{`₹${loc.avgLoan.toLocaleString()}`}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-    </div>
-
 
       {/* RECENT VALUATIONS TABLE */}
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
