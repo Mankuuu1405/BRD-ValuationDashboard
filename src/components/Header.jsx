@@ -43,7 +43,7 @@ const Header = ({ setMobileSidebarOpen }) => {
     >
       {/* Name (hidden on very small screens) */}
       <div className="hidden sm:flex flex-col">
-        <p className="text-gray-900 font-medium text-sm sm:text-base truncate max-w-[120px]">
+        <p className="text-gray-900 font-medium text-sm sm:text-base ">
           Welcome, {user?.name || "User"}
         </p>
       </div>
