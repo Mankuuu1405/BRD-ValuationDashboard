@@ -14,8 +14,9 @@ export const StatCard = ({ icon: Icon, title, value, trend }) => {
   return (
     <div className="bg-white rounded-xl shadow-card p-4 border border-gray-100 cursor-pointer">
       <div className="flex items-center justify-between">
-        <div className="h-9 w-9 rounded-lg bg-primary-50 text-primary-700 grid place-items-center">
-          {Icon && <Icon className="h-5 w-5" style={{ color: primary[600] }} />}
+        <div className="h-9 w-9 rounded-lg bg-blue-50 text-blue-700 grid place-items-center">
+          {Icon && <Icon className="h-5 w-5 text-blue-600" />}{" "}
+          {/* ✅ use capitalized Icon */}
         </div>
         {trend != null && (
           <div

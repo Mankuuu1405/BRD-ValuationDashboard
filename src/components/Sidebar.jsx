@@ -111,7 +111,7 @@ const Sidebar = ({ mobileSidebarOpen, setMobileSidebarOpen }) => {
             <ShieldCheckIcon className="h-5 w-5" />
           </div>
           <div className="flex flex-col">
-            <div className="text-base font-semibold">Valuation Dashboard</div>
+            <div className="text-lg font-semibold">Valuation Dashboard</div>
             <div className="text-xs" style={{ color: "#6b7280" }}>
               Admin Panel
             </div>
